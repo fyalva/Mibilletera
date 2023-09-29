@@ -3,71 +3,118 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using miBilletera.Data;
+using miBilletera.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace miBilletera.Controllers
+{namespace miBilletera.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UsuarioController : Controller
     {
-        private readonly ILogger<UsuarioController> _logger;
+        public readonly MiDbContext _context;
 
-        public UsuarioController(ILogger<UsuarioController> logger)
+        public UsuarioController(MiDbContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View("Error!");
-        }
-    }
-}
-/*    public class UsuarioController : ApiController
-    {
-        string cadena = ConfigurationManager.ConnectionStrings["MiCadena"].ConnectionString;
-        // GET: api/Usuario
+        // Obtener todos los usuarios
         [HttpGet]
-        public IHttpActionResult  Get()
+        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
         {
-            DataTable dt = new DataTable();
-            using (SqlConnection conector = new SqlConnection())
+            var usuarios = await _context.Usuarios.ToListAsync();
+
+            if (usuarios == null)
             {
-                conector.Open();
-                SqlDataAdapter adaptador = new SqlDataAdapter("SELECT * FROM Usuario", conector);
-                adaptador.Fill(dt);
-
+                return NotFound();
             }
-            return Ok(dt);
+
+            return usuarios;
         }
 
-        // GET: api/Usuario/5
-        public string Get(int id)
+        // Obtener un usuario por ID
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Usuario>> GetUsuario(int id)
         {
-            return "value";
+            var usuario = await _context.Usuarios.FindAsync(id);
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            return usuario;
         }
 
-        // POST: api/Usuario
-        public void Post([FromBody]string value)
+        // Crear un nuevo usuario
+        [HttpPost]
+        public async Task<ActionResult<Usuario>> CrearUsuario(Usuario usuario)
         {
+            if (usuario == null)
+            {
+                return BadRequest();
+            }
+
+            _context.Usuarios.Add(usuario);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetUsuario), new { id = usuario.IdUsuario }, usuario);
         }
 
-        // PUT: api/Usuario/5
-        public void Put(int id, [FromBody]string value)
+        // Actualizar un usuario por ID
+        [HttpPut("{id}")]
+        public async Task<IActionResult> ActualizarUsuario(int id, Usuario usuario)
         {
+            if (id != usuario.IdUsuario || usuario == null)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(usuario).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UsuarioExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // DELETE: api/Usuario/5
-        public void Delete(int id)
+        // Eliminar un usuario por ID
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> EliminarUsuario(int id)
         {
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            _context.Usuarios.Remove(usuario);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool UsuarioExists(int id)
+        {
+            return _context.Usuarios.Any(e => e.IdUsuario == id);
         }
     }
 }
-*/
+}
