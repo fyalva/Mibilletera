@@ -12,43 +12,36 @@ using Microsoft.Extensions.Logging;
 namespace miBilletera.Controllers
 {namespace miBilletera.Controllers
 {
-    [Route("api/[controller]")]
+  [Route("api/[controller]")]
     public class UsuarioController : Controller
     {
         public readonly MiDbContext _context;
-
+   
         public UsuarioController(MiDbContext context)
         {
             _context = context;
         }
 
         // Obtener todos los usuarios
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
+       [HttpGet]
+        public ActionResult<IEnumerable<Usuario>> Get()
         {
-            var usuarios = await _context.Usuarios.ToListAsync();
-
-            if (usuarios == null)
-            {
-                return NotFound();
-            }
-
-            return usuarios;
+            return _context.Usuarios.ToList();
         }
 
         // Obtener un usuario por ID
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetUsuario(int id)
-        {
-            var usuario = await _context.Usuarios.FindAsync(id);
+ [HttpGet("{id:int}")]
+public async Task<ActionResult<Usuario>> GetUsuario(int id)
+{   
+       var usuario = await _context.Usuarios.FindAsync(id);
 
-            if (usuario == null)
-            {
-                return NotFound();
-            }
+    if (usuario == null)
+    {
+        return NotFound();
+    }
 
-            return usuario;
-        }
+    return usuario;
+}
 
         // Crear un nuevo usuario
         [HttpPost]

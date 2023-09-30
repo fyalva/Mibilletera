@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<MiDbContext>(
-  options => options.UseSqlServer("Server=DESKTOP-UU8OQRO;Database=Corrientes;Integrated Security=True;"));
+  options => options.UseSqlServer("Server=DESKTOP-UU8OQRO;Database=Corrientes;Integrated Security=True;TrustServerCertificate=True;"));
 
 // Agregar configuración de Swagger
 builder.Services.AddSwaggerGen(c =>
@@ -25,6 +25,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mi API V1");
     c.RoutePrefix = "swagger"; // Esto puede ayudar a resolver problemas de ruta
 });
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
