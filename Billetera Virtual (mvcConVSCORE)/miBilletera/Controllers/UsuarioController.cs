@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace miBilletera.Controllers
 {namespace miBilletera.Controllers
-{
+{/*
   [Route("api/[controller]")]
     public class UsuarioController : Controller
     {
@@ -108,6 +108,6 @@ public async Task<ActionResult<Usuario>> GetUsuario(int id)
         {
             return _context.Usuarios.Any(e => e.IdUsuario == id);
         }
-    }
+    }*/
 }
 }

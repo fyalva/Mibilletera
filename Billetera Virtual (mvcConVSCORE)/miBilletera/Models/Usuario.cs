@@ -22,6 +22,6 @@ namespace miBilletera.Models
         public string Evidencia2 { get; set; }="";
         public string Evidencia3 { get; set; }="";
         public string Estado { get; set; }="";
-        public int Coloquio { get; set; }
+        public string Coloquio { get; set; }="";
     }
 }
