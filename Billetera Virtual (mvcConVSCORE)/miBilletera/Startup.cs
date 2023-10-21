@@ -7,14 +7,14 @@ using Microsoft.AspNetCore.Hosting;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 
 
 namespace miBilletera
-{
-    public class Startup
-    {
-        public Startup(IConfiguration configuration)
+{     public class Startup
+    {public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
@@ -23,41 +23,40 @@ namespace miBilletera
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("MyAllowSpecificOrigins",
+                    builder =>
+                    {
+                        builder
+                            .WithOrigins("http://localhost:4200")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
+
             services.AddControllers();
-            
+
             // Agrega la configuración de Swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Mi API", Version = "v1" });
             });
         }
-      public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
-            }
+            // Habilita CORS con la política configurada
+            app.UseCors("MyAllowSpecificOrigins");
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            // Habilita Swagger UI en la ruta /swagger
+            // Habilita Swagger
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mi API V1");
             });
-              app.UseEndpoints(endpoints =>
+
+            app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
@@ -65,4 +64,9 @@ namespace miBilletera
             });
         }
     }
-    }
+}
+
+
+
+
+

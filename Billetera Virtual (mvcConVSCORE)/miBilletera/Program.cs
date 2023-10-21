@@ -5,8 +5,12 @@ using Microsoft.OpenApi.Models; // Agregar esta línea
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<ClienteDB>(
+  options => options.UseSqlServer("Server=DESKTOP-UU8OQRO;Database=Corrientes;Integrated Security=True;TrustServerCertificate=True;"));
+
 builder.Services.AddDbContext<MiDbContext>(
   options => options.UseSqlServer("Server=DESKTOP-UU8OQRO;Database=Corrientes;Integrated Security=True;TrustServerCertificate=True;"));
 

@@ -1,55 +1,48 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using miBilletera.Data;
+using miBilletera.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using miBilletera.Models; // Importa el espacio de nombres que contiene la clase ClienteUsuario
+using static miBilletera.Models.ClienteUsuario;
+
 
 namespace miBilletera.Controllers
-{
-    [Route("[controller]")]
-    public class clienteUsuarioController : Controller
-    {
-        private readonly ILogger<clienteUsuarioController> _logger;
-        private readonly clienteDB _context;
+{ //config.EnableCors(); [EnableCors( "*")]
 
-        public clienteUsuarioController(ILogger<clienteUsuarioController> logger, clienteDB context)
+    [Route("[controller]")]
+    public class ClienteUsuarioController : Controller
+    {
+        private readonly ILogger<ClienteUsuarioController> _logger;
+        private readonly ClienteDB _context;
+        public ClienteUsuarioController(ILogger<ClienteUsuarioController> logger, ClienteDB context)
         {
             _logger = logger;
-            _context = context;
+            _context= context;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View("Error!");
-        }
-
-       [HttpPost(Name = "IngresarUsuario")]
-public async Task<ActionResult<clienteUsuario>> IngresarCliente([FromBody] ClienteUsuario cliente)
+//[EnableCors("AllowOrigin")]
+[HttpGet (Name = "GetClienteCliente")]
+public async Task<ActionResult<IEnumerable<ClienteUsuario>>> GetClientes()
 {
-    try
-    {
-        // Crear una instancia de ClienteDB
-        var clienteDB = new ClienteDB();
-
-        // Agregar el objeto ClienteUsuario a través de ClienteDB
-        clienteDB.Cliente.Add(cliente);
-
-        // Guardar los cambios en la base de datos
-        await clienteDB.SaveChangesAsync();
-
-        return CreatedAtAction("GetUsuarios", new { id = cliente.Idcliente }, cliente);
-    }
-    catch (Exception ex)
-    {
-        return BadRequest($"Error al ingresar el usuario: {ex.Message}");
-    }
+    return await _context.Clientes.ToListAsync();
 }
+//[EnableCors("AllowOrigin")]
+ [HttpPost(Name = "IngresarClienteUsuarios")]
+public async Task<IActionResult> CrearClientes([FromBody] ClienteUsuario Clientes) 
+{
+    if (ModelState.IsValid)
+    {
+        _context.Clientes.Add(Clientes);
+        await _context.SaveChangesAsync();
+        return CreatedAtAction("ObtenerCliente", new { id = Clientes.Idcliente}, Clientes);
+
     }
-}
+    return BadRequest(ModelState);
+}}
+    }

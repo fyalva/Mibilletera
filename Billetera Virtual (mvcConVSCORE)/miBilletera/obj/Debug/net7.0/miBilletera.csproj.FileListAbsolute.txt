@@ -127,3 +127,5 @@ C:\Users\Monica\source\Corrientes\Billetera Virtual (mvcConVSCORE)\miBilletera\o
 C:\Users\Monica\source\Corrientes\Billetera Virtual (mvcConVSCORE)\miBilletera\obj\Debug\net7.0\miBilletera.pdb
 C:\Users\Monica\source\Corrientes\Billetera Virtual (mvcConVSCORE)\miBilletera\obj\Debug\net7.0\miBilletera.genruntimeconfig.cache
 C:\Users\Monica\source\Corrientes\Billetera Virtual (mvcConVSCORE)\miBilletera\obj\Debug\net7.0\ref\miBilletera.dll
+C:\Users\Monica\source\Corrientes\Billetera Virtual (mvcConVSCORE)\miBilletera\bin\Debug\net7.0\package-lock.json
+C:\Users\Monica\source\Corrientes\Billetera Virtual (mvcConVSCORE)\miBilletera\bin\Debug\net7.0\package.json

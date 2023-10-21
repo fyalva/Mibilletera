@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace miBilletera.Models
 {
-    public class clienteUsuario
+    public class ClienteUsuario
     {
+    
           [Key]
           [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Idcliente { get; set; }
@@ -16,4 +17,4 @@ namespace miBilletera.Models
         public string apellido { get; set; }="";
         public string password { get; set; }="";
     }
-}
+    }

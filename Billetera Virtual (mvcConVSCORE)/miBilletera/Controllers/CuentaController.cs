@@ -14,11 +14,11 @@ namespace miBilletera.Controllers
     [Route("[controller]")]
     public class CuentaController : Controller
     {
-        private readonly ILogger<CuentaController> _logger;
+      //  private readonly ILogger<CuentaController> _logger;
         private readonly MiDbContext _context;
         public CuentaController(ILogger<CuentaController> logger, MiDbContext context)
         {
-            _logger = logger;
+     //       _logger = logger;
             _context= context;
         }
 [HttpGet (Name = "GetUsuarios")]
@@ -30,7 +30,7 @@ public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
 
 //ingresar usuario nuevo
 
-[HttpPost]
+[HttpPost(Name = "IngresarCliente")]
 public async Task<IActionResult> CrearUsuario([FromBody] Usuario Usuarios)
 {
     if (ModelState.IsValid)
@@ -41,61 +41,5 @@ public async Task<IActionResult> CrearUsuario([FromBody] Usuario Usuarios)
     }
     return BadRequest(ModelState);
 }
-
-
-
-
-
-
-
-
-/////////
-
-
-
-
-
-
-
-
-
-/*
-[HttpPost(Name = "IngresarUsuario")]
-public async Task<ActionResult<Usuario>> IngresarUsuario([FromBody] Usuario Usuario)
-{
-    try
-    {
-        _context.Usuarios.Add(Usuario);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction("GetUsuarios", new { id = Usuario.IdUsuario }, Usuario);
-    }
-    catch (Exception ex)
-    {
-        return BadRequest($"Error al ingresar el usuario: {ex.Message}");
-    }
 }
-/*
-[HttpGet("{id}", Name = "GetUsuarioById")]
-public async Task<ActionResult<Usuario>> GetUsuarioById(int id)
-{
-    var usuario = await _context.Usuarios.FindAsync(id);
-
-    if (usuario == null)
-    {
-        return NotFound(); // Devuelve un resultado 404 si no se encuentra el usuario.
-    }
-
-    return usuario;
-}
-
-*/
-
-
-
-
-
-
-}
-
 }

@@ -2,21 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using miBilletera.Controllers;
-using Microsoft.EntityFrameworkCore;
-
 using miBilletera.Models;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace miBilletera.Data
 {
-    public class clienteDB : DbContext
+    public class ClienteDB : DbContext
     {
-        public clienteDB(DbContextOptions<clienteDB> options) : base(options)
+        public ClienteDB(DbContextOptions<ClienteDB> options) : base(options)
         {
         }
-
-        public DbSet<clienteUsuario> Cliente { get; set; } // Debes utilizar el nombre correcto de la clase ClienteUsuario
+     
+         public DbSet<ClienteUsuario> Clientes { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
