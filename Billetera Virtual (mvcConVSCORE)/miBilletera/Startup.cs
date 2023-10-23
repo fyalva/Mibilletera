@@ -18,23 +18,28 @@ namespace miBilletera
         {
             Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
+   
+        public IConfiguration Configuration { get; }//"http://localhost:4200"
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
+/*services.AddCors(options =>
+    {
+        options.AddPolicy("MyAllowSpecificOrigins",
+            builder =>
             {
-                options.AddPolicy("MyAllowSpecificOrigins",
-                    builder =>
-                    {
-                        builder
-                            .WithOrigins("http://localhost:4200")
-                            .AllowAnyHeader()
-                            .AllowAnyMethod();
-                    });
+                builder
+                   // .WithOrigins("*")
+                    .AllowAnyOrigin() // Aquí debes especificar las URLs permitidas http://localhost:4200/sesion
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
             });
-
+                builder
+                    .WithOrigins("*") // Aquí debes especificar las URLs permitidas http://localhost:4200/sesion
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+    });*/
             services.AddControllers();
 
             // Agrega la configuración de Swagger
@@ -47,8 +52,8 @@ namespace miBilletera
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // Habilita CORS con la política configurada
-            app.UseCors("MyAllowSpecificOrigins");
-
+            app.UseCors("MyAllowSpecificOrigins"); // Habilita CORS con la política configurada
+            
             // Habilita Swagger
             app.UseSwagger();
             app.UseSwaggerUI(c =>

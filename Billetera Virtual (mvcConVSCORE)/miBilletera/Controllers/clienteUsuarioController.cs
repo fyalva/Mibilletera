@@ -13,9 +13,8 @@ using static miBilletera.Models.ClienteUsuario;
 
 
 namespace miBilletera.Controllers
-{ //config.EnableCors(); [EnableCors( "*")]
-
-    [Route("[controller]")]
+{ //config.EnableCors(); [EnableCors( "*")][EnableCors("MyAllowSpecificOrigins")] [EnableCors("MyAllowSpecificOrigins")]
+   // [Route("[controller]")]
     public class ClienteUsuarioController : Controller
     {
         private readonly ILogger<ClienteUsuarioController> _logger;
@@ -32,7 +31,7 @@ public async Task<ActionResult<IEnumerable<ClienteUsuario>>> GetClientes()
 {
     return await _context.Clientes.ToListAsync();
 }
-//[EnableCors("AllowOrigin")]
+//[EnableCors("MyAllowSpecificOrigins")]
  [HttpPost(Name = "IngresarClienteUsuarios")]
 public async Task<IActionResult> CrearClientes([FromBody] ClienteUsuario Clientes) 
 {
